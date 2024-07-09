@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1050.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.company.controller.MachineFormController">
+   <children>
+      <ImageView fitHeight="1050.0" fitWidth="1500.0" opacity="0.93">
+         <image>
+            <Image url="@../asserts.icon/electrical_work_templates_ppt_340120.jpg" />
+         </image>
+      </ImageView>
+      <Pane prefHeight="150.0" prefWidth="1500.0" style="-fx-background-color: #5D6D7E;">
+         <children>
+            <Label layoutX="121.0" layoutY="21.0" text="Machine" textFill="#fcf7f7">
+               <font>
+                  <Font name="System Bold Italic" size="58.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <TableView fx:id="tblMachine" layoutX="115.0" layoutY="584.0" prefHeight="293.0" prefWidth="1175.0">
+         <columns>
+            <TableColumn prefWidth="110.0" text="Code" />
+            <TableColumn prefWidth="390.0" text="Description" />
+            <TableColumn prefWidth="674.0" text="Status" />
+         </columns>
+      </TableView>
+      <TextField fx:id="txtCode" layoutX="137.0" layoutY="182.0" prefHeight="26.0" prefWidth="300.0" promptText="Machin Code" />
+      <TextField fx:id="txtDescription" layoutX="137.0" layoutY="240.0" prefHeight="26.0" prefWidth="600.0" promptText="Description :" />
+      <TextField fx:id="txtStatus" layoutX="137.0" layoutY="299.0" prefHeight="26.0" prefWidth="900.0" promptText="Status" />
+      <JFXButton id="btnAddNewCustomer" fx:id="btnAddNewMachin" layoutX="318.0" layoutY="446.0" onAction="#btnAddNew_OnAction" prefHeight="44.0" prefWidth="186.0" style="-fx-background-color: #3498db;" text="+ New Machine" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font></JFXButton>
+      <JFXButton id="btnSave" fx:id="btnSave" layoutX="619.0" layoutY="446.0" onAction="#btnSave_OnAction" prefHeight="44.0" prefWidth="97.0" style="-fx-background-color: #3498db;" text="Save" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font></JFXButton>
+      <JFXButton id="btnDelete" fx:id="btnDelete" layoutX="846.0" layoutY="446.0" onAction="#btnDelete_OnAction" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #3498db;" text="Delete" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font></JFXButton>
+   </children>
+</AnchorPane>

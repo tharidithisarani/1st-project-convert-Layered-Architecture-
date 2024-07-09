@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootConOrder" prefHeight="600.0" prefWidth="1500.0" style="-fx-background-color: #F8C471;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.company.controller.ConstructerOrderFormController">
+   <children>
+      <TableView fx:id="tblBigOrder" layoutX="9.0" layoutY="310.0" prefHeight="194.0" prefWidth="1479.0">
+         <columns>
+            <TableColumn prefWidth="135.00000762939453" text="RagestrationCode" />
+            <TableColumn prefWidth="184.0" text="Name" />
+            <TableColumn minWidth="0.0" prefWidth="133.0" text="Contact" />
+            <TableColumn prefWidth="76.0" text="Count" />
+            <TableColumn prefWidth="179.0" text="Address" />
+            <TableColumn prefWidth="195.0" text="Full Pay (Rs.)" />
+            <TableColumn prefWidth="157.6666259765625" text="Advanse (Rs.)" />
+            <TableColumn prefWidth="139.666748046875" text="Remaining (Rs.)" />
+            <TableColumn prefWidth="89.333251953125" text="Delete" />
+         </columns>
+      </TableView>
+      <Line endX="-6.0" layoutX="115.0" layoutY="153.0" startX="-100.0" strokeWidth="1.8" style="-fx-background-color: #34495E;" />
+      <Label layoutX="120.0" layoutY="139.0" text="Technisiyans ADD" textFill="#34495e">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Line endX="942.3333740234375" layoutX="427.0" layoutY="153.0" startX="-100.0" strokeWidth="1.8" style="-fx-background-color: #34495E;" />
+      <Line endX="-6.0" layoutX="120.0" layoutY="236.0" startX="-100.0" strokeWidth="1.5" style="-fx-background-color: #34495E;" />
+      <Label layoutX="125.0" layoutY="222.0" text="Astimet" textFill="#34495e">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <Line endX="670.0" layoutX="306.0" layoutY="236.0" startX="-100.0" strokeWidth="1.5" style="-fx-background-color: #34495E;" />
+      <Pane layoutY="2.0" prefHeight="34.0" prefWidth="1500.0" style="-fx-background-color: #1F618D;">
+         <children>
+            <Label layoutX="441.0" layoutY="1.0" prefHeight="38.0" prefWidth="237.0" text="Constructer Order" textFill="#e5e8e8">
+               <font>
+                  <Font name="System Bold" size="26.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <JFXButton fx:id="btnBack" buttonType="RAISED" layoutX="1396.0" layoutY="540.0" onAction="#btnBackOnAction" opacity="0.0" prefHeight="33.0" prefWidth="66.0" style="-fx-background-color: #bdc3c7;" text="Back">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
+      <Label fx:id="lblId" alignment="CENTER_RIGHT" layoutX="4.0" layoutY="57.0" prefHeight="26.0" prefWidth="255.0" text="CONSTRUCTORE ID : CON001">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="cmbRegCode" labelFloat="true" layoutX="346.0" layoutY="57.0" prefHeight="28.0" prefWidth="161.0" promptText="Registration code" />
+      <TextField fx:id="txtAddress" layoutX="870.0" layoutY="93.0" prefHeight="26.0" prefWidth="606.0" promptText="Address" />
+      <TextField fx:id="txtName" layoutX="21.0" layoutY="95.0" prefHeight="27.0" prefWidth="438.0" promptText="Name" />
+      <TextField fx:id="txtContact" layoutX="535.0" layoutY="93.0" prefHeight="27.0" prefWidth="281.0" promptText="Contact Number" />
+      <JFXComboBox fx:id="cmbTechnisiyanId" labelFloat="true" layoutX="22.0" layoutY="172.0" prefHeight="28.0" prefWidth="178.0" promptText="Main - Technisiyan ID" />
+      <Label layoutX="616.0" layoutY="178.0" text="Technisiyan Count">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="txtCount" layoutX="746.0" layoutY="173.0" onAction="#txtQty_OnAction" prefHeight="27.0" prefWidth="121.0" promptText="count" />
+      <TextField fx:id="txtFullPayment" layoutX="29.0" layoutY="257.0" prefHeight="27.0" prefWidth="289.0" promptText="Full Payment (Rs.)" />
+      <TextField fx:id="txtAdvance" layoutX="381.0" layoutY="257.0" prefHeight="27.0" prefWidth="255.0" promptText="Pay Advance (Rs.)" />
+      <JFXButton fx:id="btnPlaceOrder" buttonType="RAISED" layoutX="1204.0" layoutY="520.0" onAction="#btnPlaceOrder_OnAction" prefHeight="36.0" prefWidth="271.0" style="-fx-background-color: #34495e; -fx-background-radius: 50;" text="Place Order" textFill="#f4d03f">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </JFXButton>
+      <TextField fx:id="txtTechName" layoutX="261.0" layoutY="175.0" prefHeight="27.0" prefWidth="307.0" promptText="Name" />
+      <Label fx:id="lblRePay" layoutX="703.0" layoutY="255.0" prefHeight="32.0" prefWidth="475.0" text="Remaining Payment (Rs.) 0.00" textFill="#9e372d">
+         <font>
+            <Font name="System Bold Italic" size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblDate" alignment="CENTER_RIGHT" layoutX="1241.0" layoutY="46.0" prefHeight="24.0" prefWidth="152.0" text="2021-10-11">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <JFXButton id="btnAddNewCustomer" fx:id="btnAddNewOrder" layoutX="1274.0" layoutY="159.0" onAction="#btnAddNew_OnAction" prefHeight="44.0" prefWidth="186.0" style="-fx-background-color: #34495e; -fx-background-radius: 50;" text="+ New Order" textFill="#f4d03f">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton id="btnSave" fx:id="btnSave" layoutX="1336.0" layoutY="209.0" onAction="#btnSave_OnAction" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #34495e; -fx-background-radius: 50;" text="Save" textFill="#f4d03f">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </JFXButton>
+      <JFXButton id="btnDelete" fx:id="btnDelete" layoutX="1340.0" layoutY="260.0" onAction="#btnDelete_OnAction" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #34495e; -fx-background-radius: 50;" text="Delete" textFill="#f4d03f">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

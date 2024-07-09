@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootSupplier" prefHeight="1050.0" prefWidth="1500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.company.controller.SupplierFormController">
+   <children>
+      <Pane prefHeight="150.0" prefWidth="1500.0" style="-fx-background-color: #5D6D7E;">
+         <children>
+            <Label layoutX="121.0" layoutY="21.0" text="Company" textFill="#fcf7f7">
+               <font>
+                  <Font name="System Bold Italic" size="58.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <Pane layoutY="150.0" prefHeight="900.0" prefWidth="1500.0">
+         <children>
+            <ImageView fitHeight="884.0" fitWidth="1500.0" opacity="0.38" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../asserts.icon/3d-render-men-loading-trucks.jpg" />
+               </image>
+            </ImageView>
+            <Label layoutX="368.0" layoutY="75.0" text="Company Code: ">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblSupID" layoutX="197.0" layoutY="86.0" prefHeight="20.0" prefWidth="1.0" text=" ">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="364.0" layoutY="153.0" text="Company Name">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="367.0" layoutY="197.0" text="Description">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="367.0" layoutY="291.0" text="Email : ">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="367.0" layoutY="241.0" prefHeight="27.0" prefWidth="80.0" text="Contact">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCode" layoutX="515.0" layoutY="78.0" prefHeight="26.0" prefWidth="606.0" promptText="Company code" />
+            <TextField fx:id="txtContact" layoutX="515.0" layoutY="236.0" prefHeight="35.0" prefWidth="302.0" promptText="Company Contact number" />
+            <TextField fx:id="txtEmail" layoutX="515.0" layoutY="283.0" prefHeight="35.0" prefWidth="422.0" promptText="Companty email - @gmail.lk" />
+            <TextField fx:id="txtName" layoutX="515.0" layoutY="147.0" prefHeight="35.0" prefWidth="606.0" promptText="Company Name" />
+            <TextField fx:id="txtDescription" layoutX="515.0" layoutY="192.0" prefHeight="35.0" prefWidth="596.0" promptText="description" />
+            <JFXButton id="btnAddNewCustomer" fx:id="btnAddNewCompany" layoutX="1259.0" layoutY="14.0" onAction="#btnAddNew_OnAction" prefHeight="44.0" prefWidth="193.0" style="-fx-background-color: #3498db;" text="+ New Supplier" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></JFXButton>
+            <JFXButton id="btnSave" fx:id="btnSave" layoutX="1349.0" layoutY="74.0" onAction="#btnSave_OnAction" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #3498db;" text="Save" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></JFXButton>
+            <JFXButton id="btnDelete" fx:id="btnDelete" layoutX="1317.0" layoutY="134.0" onAction="#btnDelete_OnAction" prefHeight="44.0" prefWidth="133.0" style="-fx-background-color: #3498db;" text="Delete" textFill="#f2f2f2">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font></JFXButton>
+            <TableView fx:id="tblCompany" layoutX="45.0" layoutY="436.0" prefHeight="316.0" prefWidth="1279.0">
+               <columns>
+                  <TableColumn prefWidth="137.0" text="Code" />
+                  <TableColumn prefWidth="236.0" text="Name" />
+                  <TableColumn prefWidth="190.0" text="Contact" />
+                  <TableColumn prefWidth="302.0000305175781" text="Email" />
+                  <TableColumn prefWidth="565.3333129882812" text="Description" />
+               </columns>
+            </TableView>
+            <JFXButton fx:id="btnItemOnAction" layoutX="1152.0" layoutY="766.0" onAction="#btnTechDetail_OnAction" prefHeight="64.0" prefWidth="317.0" style="-fx-background-color: #34495e; -fx-background-radius: 50;" text="+ Item" textFill="#f4d03f">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>
