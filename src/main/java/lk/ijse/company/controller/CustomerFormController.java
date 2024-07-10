@@ -18,7 +18,7 @@ import lk.ijse.company.database.DbConnection;
 import lk.ijse.company.model.*;
 import lk.ijse.company.model.tm.CartTm;
 import lk.ijse.company.model.tm.OrderDetailTm;
-import lk.ijse.company.reposotory.OrderRepo;
+//import lk.ijse.company.reposotory.OrderRepo;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -285,15 +285,7 @@ public class CustomerFormController {
     }
 
 
-    private void lodeNextCustomerId() {
-        try {
-            String currentId = OrderRepo.currentId();
-            String nextId = nextId(currentId);
-            lblCusID.setText(nextId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     private String nextId(String currentId) {
         if (currentId != null) {

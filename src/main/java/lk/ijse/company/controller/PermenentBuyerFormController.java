@@ -204,19 +204,19 @@ public class PermenentBuyerFormController {
         String contact = txtContact.getText();
         String description = txtDescription.getText();
 
-        if (!description.matches("[A-Za-z0-9 ]+")) {
+        /*if (!description.matches("[A-Za-z0-9 ]+")) {
             new Alert(Alert.AlertType.ERROR, "Invalid description").show();
             txtDescription.requestFocus();
             return;
-        /*} else if (!txtUnitPrice.getText().matches("^[0-9]+[.]?[0-9]*$")) {
+        } else if (!txtUnitPrice.getText().matches("^[0-9]+[.]?[0-9]*$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid unit price").show();
             txtUnitPrice.requestFocus();
             return;
         } else if (!txtQtyOnHand.getText().matches("^\\d+$")) {
             new Alert(Alert.AlertType.ERROR, "Invalid qty on hand").show();
             txtQtyOnHand.requestFocus();
-            return;*/
-        }
+            return;
+        }*/
 
 
         if (btnSave.getText().equalsIgnoreCase("save")) {

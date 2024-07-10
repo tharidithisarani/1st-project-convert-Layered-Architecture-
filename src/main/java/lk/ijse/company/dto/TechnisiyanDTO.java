@@ -1,4 +1,4 @@
-package lk.ijse.company.model;
+package lk.ijse.company.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,10 +10,14 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 
-public class Permenent implements Serializable {
+public class TechnisiyanDTO implements Serializable {
     private String code;
+    private String nic;
     private String name;
     private String address;
     private String contact;
+    private String bankName;
+    private String accountNum;
+    private String toolCode;
     private String description;
 }

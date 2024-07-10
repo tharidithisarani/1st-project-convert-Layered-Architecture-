@@ -1,3 +1,4 @@
+/*
 package lk.ijse.company.controller;
 
 import com.jfoenix.controls.JFXButton;
@@ -92,7 +93,9 @@ public class TechnisiyanFormController {
 
             if (newValue != null) {
                 try {
-                    /*Search Technisiyan*/
+                    */
+/*Search Technisiyan*//*
+
                     Connection connection = DbConnection.getInstance().getConnection();
                     try {
                         if (!existTechnisiyan(newValue + "")) {
@@ -231,4 +234,4 @@ public class TechnisiyanFormController {
         cmbTechCode.requestFocus();
     }
 
-}
+}*/

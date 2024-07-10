@@ -1,5 +1,4 @@
-/*
-package lk.ijse.company.model;
+package lk.ijse.company.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 
-public class permenentBuyer {
-    private String name;
-    private String address;
+public class Machine {
+    private String code;
+    private String description;
     private String status;
-    private String contact;
 }
-*/
