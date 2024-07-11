@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 
-public class CustomerEntity {
+public class CustomEntity {
     //Order
     private String orderId;
     private String customerId;

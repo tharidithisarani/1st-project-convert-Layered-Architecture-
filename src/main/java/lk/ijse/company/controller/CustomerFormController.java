@@ -14,7 +14,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import lk.ijse.company.bo.BOFactory;
+import lk.ijse.company.bo.custom.CustomerBO;
 import lk.ijse.company.database.DbConnection;
+import lk.ijse.company.dto.ItemDTO;
+import lk.ijse.company.dto.OrderDTO;
 import lk.ijse.company.model.*;
 import lk.ijse.company.model.tm.CartTm;
 import lk.ijse.company.model.tm.OrderDetailTm;
@@ -115,6 +119,8 @@ public class CustomerFormController {
     @FXML
     private Label lblId;
 
+    CustomerBO customerBO  = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.Customer);
+
     public void initialize() {
         tblOrderDetails.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblOrderDetails.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -155,17 +161,18 @@ public class CustomerFormController {
             btnAddCart.setDisable(newItemCode == null);
 
             if (newItemCode != null) {
-
+                //find item
                 try {
-                    if (!existItem(newItemCode + "")) {
-//                        throw new NotFoundException("There is no such item associated with the id " + code);
-                    }
-                    Connection connection = DbConnection.getInstance().getConnection();
+                    if (!existItem(newItemCode + "")) {}
+                    /*Connection connection = DbConnection.getInstance().getConnection();
                     PreparedStatement pstm = connection.prepareStatement("SELECT * FROM Item WHERE code=?");
                     pstm.setString(1, newItemCode + "");
                     ResultSet rst = pstm.executeQuery();
                     rst.next();
                     Item item = new Item(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
+*/
+
+                    ItemDTO item = customerBO.searchItem(newItemCode + "");
 
                     txtDescription.setText(item.getDescription());
                     txtUnitPrice.setText(item.getUnitPrice().setScale(2).toString());
@@ -210,35 +217,45 @@ public class CustomerFormController {
     private void loadAllItemCodes() {
         try {
             /*Get all items*/
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM Item");
             while (rst.next()) {
                 cmbItemCode.getItems().add(rst.getString("code"));
+            }*/
+            ArrayList<ItemDTO> allItems = customerBO.getAllItems();
+            for (ItemDTO i : allItems) {
+                cmbItemCode.getItems().add(i.getCode());
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     private String generateNewOrderId() {
         try {
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT oid FROM `Orders` ORDER BY oid DESC LIMIT 1;");
 
-            return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";
+            return rst.next() ? String.format("OID-%03d", (Integer.parseInt(rst.getString("oid").replace("OID-", "")) + 1)) : "OID-001";*/
+            return customerBO.generateOrderID();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to generate a new order id").show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return "OID-001";
     }
 
     private boolean existItem(String code) throws SQLException, ClassNotFoundException {
-        Connection connection = DbConnection.getInstance().getConnection();
+        /*Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
         pstm.setString(1, code);
-        return pstm.executeQuery().next();
+        return pstm.executeQuery().next();*/
+        return customerBO.existItem(code);
     }
 
     private void enableOrDisablePlaceOrderButton() {
@@ -252,63 +269,6 @@ public class CustomerFormController {
             total = total.add(detail.getTotal());
         }
         lblTotal.setText("Total: " +total);
-    }
-
-    private Object getItemCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS item_count FROM item";
-
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-
-        ResultSet resultSet = pstm.executeQuery();
-
-        int itemCount = 0;
-        if(resultSet.next()) {
-            itemCount = resultSet.getInt("item_count");
-        }
-        return itemCount;
-    }
-
-    private int getOrderCount() throws SQLException {
-        String sql = "SELECT COUNT(*) AS order_count FROM orders";
-
-        Connection connection = DbConnection.getInstance().getConnection();
-        PreparedStatement pstm = connection.prepareStatement(sql);
-
-        ResultSet resultSet = pstm.executeQuery();
-
-        int orderCount = 0;
-        if(resultSet.next()) {
-            orderCount = resultSet.getInt("order_count");
-        }
-        return orderCount;
-    }
-
-
-
-
-    private String nextId(String currentId) {
-        if (currentId != null) {
-            String[] split = currentId.split("O");
-            int id = Integer.parseInt(split[1]);
-            return "O" + ++id;
-        }
-        return "O1";
-    }
-
-
-    private String nextOrderId(String currentOrderID) {
-        if (currentOrderID != null) {
-            String[] split = currentOrderID.split("O");
-            int id = Integer.parseInt(split[1]);
-            return "O" + ++id;
-        }
-        return "O1";
-    }
-
-    private void setDate() {
-        LocalDate now = LocalDate.now();
-        lblDate.setText(String.valueOf(now));
     }
 
     @FXML
@@ -351,40 +311,10 @@ public class CustomerFormController {
         enableOrDisablePlaceOrderButton();
     }
 
-
-    @FXML
-    void btnBackOnAction(ActionEvent event) throws IOException {
-        AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/dashboard.fxml"));
-        Scene scene = new Scene(rootNode);
-        Stage stage = (Stage) this.rootCustomer.getScene().getWindow();
-        stage.setScene(scene);
-        stage.centerOnScreen();
-        stage.setTitle("Dashboard Form");
-    }
-
-    @FXML
-    void btnBillOnAction(ActionEvent event) throws JRException, SQLException {
-        JasperDesign jasperDesign = JRXmlLoader.load("src/main/resources/Report/CustomerReport.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
-
-        Map<String, Object> date = new HashMap<>();
-        date.put("CustomerID", lblCusID.getText());
-        date.put("FullAmmount","3000");
-
-        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, date, DbConnection.getInstance().getConnection());
-
-        JasperViewer.viewReport(jasperPrint, false);
-    }
-
     @FXML
     void btnConstructerOrderOnAction(ActionEvent event) throws IOException {
-//        AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/permanent_buyer.fxml"));
-//        this.rootLode.getChildren().clear();
-//        this.rootLode.getChildren().add(anchorPane);
-
         AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/constructer_order.fxml"));
         Stage stage = (Stage) rootCusDetail.getScene().getWindow();
-//        rootCusDetail.getChildren().clear();
         rootCusDetail.getChildren().add(rootNode);
         stage.setTitle("Constructer Order Form");
         stage.centerOnScreen();
@@ -401,47 +331,38 @@ public class CustomerFormController {
     }
 
     @FXML
-    void btnPermenentBuyerOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/permanent_buyer.fxml"));
-        this.rootLode.getChildren().clear();
-        this.rootLode.getChildren().add(anchorPane);
-    }
-
-    @FXML
     void btnRegPermenentCustomerOnAction(ActionEvent event) throws IOException {
         AnchorPane anchorPane = FXMLLoader.load(this.getClass().getResource("/view/permanent_buyer.fxml"));
         this.rootLode.getChildren().clear();
         this.rootLode.getChildren().add(anchorPane);
-
-
     }
 
 
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) throws JRException, SQLException {
+    void btnPlaceOrderOnAction(ActionEvent event) throws JRException, SQLException, ClassNotFoundException {
         boolean b = saveOrder(orderId, LocalDate.now(),
                 tblOrderDetails.getItems().stream().map(tm -> new OrderDetail(tm.getCode(), tm.getQty(), tm.getUnitPrice())).collect(Collectors.toList()));
 
         if (b) {
             new Alert(Alert.AlertType.INFORMATION, "Order has been placed successfully").show();
             /*if(true){
-                JasperDesign jasperDesign =
+                 JasperDesign jasperDesign =
                         JRXmlLoader.load("src/main/resources/Report/CustomerReport.jrxml");
                 JasperReport jasperReport =
-                        JasperCompileManager.compileReport(jasperDesign);
+                    JasperCompileManager.compileReport(jasperDesign);
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("reservationId",lblId.getText());
 
                 JasperPrint jasperPrint =
-                        JasperFillManager.fillReport(
-                                jasperReport,
-                                data,
-                                DbConnection.getInstance().getConnection());
+                    JasperFillManager.fillReport(
+                            jasperReport,
+                            data,
+                            DbConnection.getInstance().getConnection());
 
                 JasperViewer.viewReport(jasperPrint,false);
             }else {
-                new Alert(Alert.AlertType.ERROR, "You have not Repot").show();
+            new Alert(Alert.AlertType.ERROR, "You have not Repot").show();
             }*/
         } else {
             new Alert(Alert.AlertType.ERROR, "Order has not been placed successfully").show();
@@ -455,8 +376,7 @@ public class CustomerFormController {
         calculateTotal();
     }
 
-    public boolean saveOrder(String orderId, LocalDate orderDate, List<OrderDetail> orderDetails) {
-
+    public boolean saveOrder(String orderId, LocalDate orderDate, List<OrderDetail> orderDetails) throws SQLException, ClassNotFoundException {
         Connection connection = null;
         try {
             connection = DbConnection.getInstance().getConnection();
@@ -464,7 +384,7 @@ public class CustomerFormController {
             PreparedStatement stm = connection.prepareStatement("SELECT oid FROM `Orders` WHERE oid=?");
             stm.setString(1, orderId);
 
-            /*if order id already exist*/
+            //if order id already exist
             if (stm.executeQuery().next()) {
 
             }
@@ -519,6 +439,8 @@ public class CustomerFormController {
             throwables.printStackTrace();
         }
         return false;
+        //OrderDTO orderDTO = new OrderDTO(orderId, orderDate, orderDetails);
+        //return customerBO.purchaseOrder(orderDTO);
     }
 
 

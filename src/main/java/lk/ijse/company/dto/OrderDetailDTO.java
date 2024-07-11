@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 
 public class OrderDetailDTO implements Serializable {
+    private String oid;
     private String itemCode;
     private int qty;
     private BigDecimal unitPrice;

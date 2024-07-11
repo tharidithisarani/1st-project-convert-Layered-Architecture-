@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 
 public class OrderDetail {
+    private String oid;
     private String itemCode;
     private int qty;
     private BigDecimal unitPrice;

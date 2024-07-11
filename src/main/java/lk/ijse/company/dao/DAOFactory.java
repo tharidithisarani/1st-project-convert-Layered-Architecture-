@@ -21,14 +21,14 @@ public class DAOFactory {
                 return new ItemDAOImpl();
             case ORDER:
                 return new OrderDAOImpl();
-            /*case ORDER_DETAIL:
+            case ORDER_DETAIL:
                 return new OrderDetailDAOImpl();
-            case MACHINE:
-                return new MachineDAOImpl();
-            case PERMENENT:
-                return new PermenentDAOImpl();
             case QUERY_DAO:
                 return new QueryDAOImpl();
+            /*case PERMENENT:
+                return new PermenentDAOImpl();
+            case MACHINE:
+                return new MachineDAOImpl();
             case SUPPLIER:
                 return new SupplierDAOImpl();
             case TECHNISIYAN:
