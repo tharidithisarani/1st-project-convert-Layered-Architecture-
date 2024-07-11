@@ -27,12 +27,12 @@ public class BOFactory {
                 return new ItemBOImpl();
             case Permenent:
                 return new PermenentBOImpl();
-            /*case Machine:
+            case Machine:
                 return new MachineBOImpl();
             case Supplier:
                 return new SupplierBOImpl();
             case Technisiyan:
-                return new TechnisiyanBOImpl();*/
+                return new TechnisiyanBOImpl();
             default:
                 return null;
         }

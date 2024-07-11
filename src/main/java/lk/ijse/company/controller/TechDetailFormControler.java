@@ -8,12 +8,16 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import lk.ijse.company.bo.BOFactory;
+import lk.ijse.company.bo.custom.TechnisiyanBO;
 import lk.ijse.company.database.DbConnection;
+import lk.ijse.company.dto.TechnisiyanDTO;
 import lk.ijse.company.model.tm.ItemTm;
 import lk.ijse.company.model.tm.TechDetailTm;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class TechDetailFormControler {
 
@@ -58,6 +62,8 @@ public class TechDetailFormControler {
 
     @FXML
     private TableView<TechDetailTm> tblTechDetail;
+
+    TechnisiyanBO technisiyanBO = (TechnisiyanBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.Technisiyan);
 
     public void initialize() {
         tblTechDetail.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -107,8 +113,8 @@ public class TechDetailFormControler {
     private void loadAllTechDetails() {
         tblTechDetail.getItems().clear();
         try {
-            /*get all Technisiyan Details*/
-            Connection connection = DbConnection.getInstance().getConnection();
+            //get all Technisiyan Details
+            /*Connection connection = DbConnection.getInstance().getConnection();
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM techDetail");
             while (rst.next()){
@@ -121,9 +127,15 @@ public class TechDetailFormControler {
                         rst.getString("accountNum"),
                         rst.getString("toolCode"),
                         rst.getString("description")));
+            }*/
+            ArrayList<TechnisiyanDTO> allTechnisiyans = technisiyanBO.getAllTechnisiyan();
+            for (TechnisiyanDTO t : allTechnisiyans){
+                tblTechDetail.getItems().add(new TechDetailTm(t.getCode(), t.getNic(), t.getName(), t.getAddress(), t.getContact(), t.getBankName(), t.getAccountNum(), t.getToolCode(), t.getDescription()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -186,7 +198,7 @@ public class TechDetailFormControler {
 
     private String generateNewId() {
         try {
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM techDetail ORDER BY code DESC LIMIT 1;");
             if (rst.next()) {
                 String id = rst.getString("code");
@@ -194,16 +206,19 @@ public class TechDetailFormControler {
                 return String.format("TD-000-%03d", newTechDetailId);
             } else {
                 return "TD-000-001";
-            }
+            }*/
+            return technisiyanBO.generateNewCode();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return "TD-000-001";
     }
 
     private String generateNewCode() {
         try {
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT toolCode FROM techDetail ORDER BY toolCode DESC LIMIT 1;");
             if (rst.next()) {
                 String id = rst.getString("toolCode");
@@ -211,7 +226,8 @@ public class TechDetailFormControler {
                 return String.format("Code-000-%03d", newToolCoed);
             } else {
                 return "Code-000-001";
-            }
+            }*/
+            return technisiyanBO.generateNewCode()
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
         }

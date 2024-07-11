@@ -1,11 +1,12 @@
 package lk.ijse.company.bo.custom;
 
+import lk.ijse.company.bo.SuperBO;
 import lk.ijse.company.dto.TechnisiyanDTO;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public interface TechnisiyanBO{
+public interface TechnisiyanBO extends SuperBO {
 
     ArrayList<TechnisiyanDTO> getAllTechnisiyan() throws SQLException, ClassNotFoundException;
 

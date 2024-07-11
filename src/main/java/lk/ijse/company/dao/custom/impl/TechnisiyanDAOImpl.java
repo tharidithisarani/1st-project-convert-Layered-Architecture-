@@ -1,15 +1,34 @@
 package lk.ijse.company.dao.custom.impl;
 
+import lk.ijse.company.dao.SQLUtil;
 import lk.ijse.company.dao.custom.TechnisiyanDAO;
+import lk.ijse.company.database.DbConnection;
 import lk.ijse.company.entity.Technisiyan;
+import lk.ijse.company.model.tm.TechDetailTm;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TechnisiyanDAOImpl implements TechnisiyanDAO {
     @Override
     public ArrayList<Technisiyan> getAll() throws SQLException, ClassNotFoundException {
-        return null;
+        ArrayList<Technisiyan> allTechnisiyans = new ArrayList<>();
+        ResultSet rst = SQLUtil.execute("SELECT * FROM techDetail");
+        while (rst.next()){
+            allTechnisiyans.add(new Technisiyan(rst.getString("code"),
+                    rst.getString("NIC"),
+                    rst.getString("name"),
+                    rst.getString("address"),
+                    rst.getString("contact"),
+                    rst.getString("bankname"),
+                    rst.getString("accountNum"),
+                    rst.getString("toolCode"),
+                    rst.getString("description")));
+        }
+        return allTechnisiyans;
     }
 
     @Override
@@ -29,7 +48,14 @@ public class TechnisiyanDAOImpl implements TechnisiyanDAO {
 
     @Override
     public String generateNewID() throws SQLException, ClassNotFoundException {
-        return null;
+        ResultSet rst =SQLUtil.execute("SELECT code FROM techDetail ORDER BY code DESC LIMIT 1;");
+        if (rst.next()) {
+            String id = rst.getString("code");
+            int newTechDetailId = Integer.parseInt(id.replace("TD-000-", "")) + 1;
+            return String.format("TD-000-%03d", newTechDetailId);
+        } else {
+            return "TD-000-001";
+        }
     }
 
     @Override
