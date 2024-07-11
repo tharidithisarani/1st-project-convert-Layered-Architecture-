@@ -10,7 +10,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.company.bo.BOFactory;
+import lk.ijse.company.bo.custom.ItemBO;
+import lk.ijse.company.bo.custom.impl.ItemBOImpl;
 import lk.ijse.company.database.DbConnection;
+import lk.ijse.company.dto.ItemDTO;
 import lk.ijse.company.model.Item;
 import lk.ijse.company.model.tm.ItemTm;
 import lombok.SneakyThrows;
@@ -51,6 +55,11 @@ public class ItemFormController {
 
     @FXML
     private TextField txtUnitPrice;
+
+//    ItemBO itemBO = new ItemBOImpl();
+//    ItemBO itemBO = BOFactory.getBoFactory().getItemBO();
+
+    ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.Item);
 
     public void initialize() {
         tblItems.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
@@ -102,17 +111,14 @@ public class ItemFormController {
         tblItems.getItems().clear();
         try {
             /*Get all items*/
-            Connection connection = DbConnection.getInstance().getConnection();
-            Statement stm = connection.createStatement();
-            ResultSet rst = stm.executeQuery("SELECT * FROM Item");
-            while (rst.next()) {
-                tblItems.getItems().add(new ItemTm(rst.getString("code"),
-                        rst.getString("description"),
-                        rst.getBigDecimal("unitPrice"),
-                        rst.getInt("qtyOnHand")));
+            ArrayList<ItemDTO> allItems = itemBO.getAllItems();
+            for (ItemDTO i : allItems) {
+                tblItems.getItems().add(new ItemTm(i.getCode(), i.getDescription(), i.getUnitPrice(), i.getQtyOnHand()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
@@ -138,7 +144,7 @@ public class ItemFormController {
 
     private String generateNewId() {
         try {
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM Item ORDER BY code DESC LIMIT 1;");
             if (rst.next()) {
                 String id = rst.getString("code");
@@ -146,9 +152,12 @@ public class ItemFormController {
                 return String.format("I00-%03d", newItemId);
             } else {
                 return "I00-001";
-            }
+            }*/
+            return itemBO.generateNewCode();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
         return "I00-001";
     }
@@ -160,16 +169,20 @@ public class ItemFormController {
             if (!existItem(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
             }
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM Item WHERE code=?");
             pstm.setString(1, code);
-            pstm.executeUpdate();
+            pstm.executeUpdate();*/
+
+            itemBO.deleteItem(code);
 
             tblItems.getItems().remove(tblItems.getSelectionModel().getSelectedItem());
             tblItems.getSelectionModel().clearSelection();
             initUI();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the item " + code).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -198,17 +211,22 @@ public class ItemFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save Item
-                Connection connection = DbConnection.getInstance().getConnection();
+                /*Connection connection = DbConnection.getInstance().getConnection();
                 PreparedStatement pstm = connection.prepareStatement("INSERT INTO Item (code, description, unitPrice, qtyOnHand) VALUES (?,?,?,?)");
                 pstm.setString(1, code);
                 pstm.setString(2, description);
                 pstm.setBigDecimal(3, unitPrice);
                 pstm.setInt(4, qtyOnHand);
-                pstm.executeUpdate();
+                pstm.executeUpdate();*/
+
+                itemBO.saveItem(new ItemDTO(code, description, unitPrice, qtyOnHand));  //save
+
                 tblItems.getItems().add(new ItemTm(code, description, unitPrice, qtyOnHand));
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         } else {
             try {
@@ -216,14 +234,15 @@ public class ItemFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such item associated with the id " + code).show();
                 }
                 /*Update Item*/
-                Connection connection = DbConnection.getInstance().getConnection();
+                /*Connection connection = DbConnection.getInstance().getConnection();
                 PreparedStatement pstm = connection.prepareStatement("UPDATE Item SET description=?, unitPrice=?, qtyOnHand=? WHERE code=?");
                 pstm.setString(1, description);
                 pstm.setBigDecimal(2, unitPrice);
                 pstm.setInt(3, qtyOnHand);
                 pstm.setString(4, code);
-                pstm.executeUpdate();
+                pstm.executeUpdate();*/
 
+                itemBO.updateItem(new ItemDTO(code, description, unitPrice, qtyOnHand));  //update
                 ItemTm selectedItem = tblItems.getSelectionModel().getSelectedItem();
 
                 selectedItem.setDescription(description);
@@ -232,6 +251,8 @@ public class ItemFormController {
                 tblItems.refresh();
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 
@@ -240,10 +261,12 @@ public class ItemFormController {
 
     @SneakyThrows
     private boolean existItem(String code) {
-        Connection connection = DbConnection.getInstance().getConnection();
+       /* Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT code FROM Item WHERE code=?");
         pstm.setString(1, code);
-        return pstm.executeQuery().next();
+        return pstm.executeQuery().next();*/
+
+        return itemBO.existItem(code);
     }
 
     @FXML
@@ -257,3 +280,4 @@ public class ItemFormController {
     }
 
 }
+
