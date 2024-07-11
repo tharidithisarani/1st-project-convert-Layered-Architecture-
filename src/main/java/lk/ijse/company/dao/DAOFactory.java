@@ -25,14 +25,14 @@ public class DAOFactory {
                 return new OrderDetailDAOImpl();
             case QUERY_DAO:
                 return new QueryDAOImpl();
-            /*case PERMENENT:
+            case PERMENENT:
                 return new PermenentDAOImpl();
             case MACHINE:
                 return new MachineDAOImpl();
             case SUPPLIER:
                 return new SupplierDAOImpl();
             case TECHNISIYAN:
-                return new TechnisiyanDAOImpl();*/
+                return new TechnisiyanDAOImpl();
             default:
                 return null;
         }

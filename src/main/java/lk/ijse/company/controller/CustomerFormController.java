@@ -172,6 +172,7 @@ public class CustomerFormController {
                     Item item = new Item(newItemCode + "", rst.getString("description"), rst.getBigDecimal("unitPrice"), rst.getInt("qtyOnHand"));
 */
 
+                    //search item
                     ItemDTO item = customerBO.searchItem(newItemCode + "");
 
                     txtDescription.setText(item.getDescription());
@@ -377,7 +378,7 @@ public class CustomerFormController {
     }
 
     public boolean saveOrder(String orderId, LocalDate orderDate, List<OrderDetail> orderDetails) throws SQLException, ClassNotFoundException {
-        Connection connection = null;
+       /* Connection connection = null;
         try {
             connection = DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
@@ -439,8 +440,10 @@ public class CustomerFormController {
             throwables.printStackTrace();
         }
         return false;
-        //OrderDTO orderDTO = new OrderDTO(orderId, orderDate, orderDetails);
-        //return customerBO.purchaseOrder(orderDTO);
+        */
+//        return customerBO.purchaseOrder(orderD);
+        OrderDTO orderDTO = new OrderDTO(orderId, orderDate, orderDetails);
+        return customerBO.purchaseOrder(orderDTO);
     }
 
 

@@ -1,4 +1,7 @@
 package lk.ijse.company.dao.custom;
 
-public interface MachineDAO {
+import lk.ijse.company.dao.CrudDAO;
+import lk.ijse.company.entity.Machine;
+
+public interface MachineDAO extends CrudDAO<Machine> {
 }

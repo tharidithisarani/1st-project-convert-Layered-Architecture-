@@ -10,12 +10,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import lk.ijse.company.bo.BOFactory;
+import lk.ijse.company.bo.custom.PermenentBO;
 import lk.ijse.company.database.DbConnection;
+import lk.ijse.company.dto.ItemDTO;
+import lk.ijse.company.dto.PermenentDTO;
 import lk.ijse.company.model.tm.ItemTm;
 import lk.ijse.company.model.tm.PermenentTm;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class PermenentBuyerFormController {
 
@@ -61,6 +66,8 @@ public class PermenentBuyerFormController {
     @FXML
     private TextField txtRegCode;
 
+    PermenentBO permenentBO = (PermenentBO) BOFactory.getBoFactory().getBO(BOFactory.BOTypes.Permenent);
+
     public void initialize() {
         tblCustomer.getColumns().get(0).setCellValueFactory(new PropertyValueFactory<>("code"));
         tblCustomer.getColumns().get(1).setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -97,8 +104,8 @@ public class PermenentBuyerFormController {
     private void loadAllPermenetCustomer() {
         tblCustomer.getItems().clear();
         try {
-            /*Get all permenent customer*/
-            Connection connection = DbConnection.getInstance().getConnection();
+            //Get all permenent customer
+            /*Connection connection = DbConnection.getInstance().getConnection();
             Statement stm = connection.createStatement();
             ResultSet rst = stm.executeQuery("SELECT * FROM permenentCus");
             while (rst.next()) {
@@ -107,9 +114,15 @@ public class PermenentBuyerFormController {
                         rst.getString("address"),
                         rst.getString("contact"),
                         rst.getString("description")));
+            }*/
+            ArrayList<PermenentDTO> allPermenentCustomers = permenentBO.getAllPermenentCus();
+            for (PermenentDTO p : allPermenentCustomers) {
+                tblCustomer.getItems().add(new PermenentTm(p.getCode(), p.getName(), p.getAddress(), p.getContact(), p.getDescription()));
             }
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -154,7 +167,7 @@ public class PermenentBuyerFormController {
 
     private String generateNewId() {
         try {
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             ResultSet rst = connection.createStatement().executeQuery("SELECT code FROM permenentCus ORDER BY code DESC LIMIT 1;");
             if (rst.next()) {
                 String id = rst.getString("code");
@@ -162,9 +175,12 @@ public class PermenentBuyerFormController {
                 return String.format("CUS00-%03d", newId);
             } else {
                 return "CUS00-001";
-            }
+            }*/
+            return permenentBO.generateNewCode();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return "CUS00-001";
     }
@@ -176,24 +192,30 @@ public class PermenentBuyerFormController {
             if (!existPermenentCustomer(code)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such permenent customer associated with the code " + code).show();
             }
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM permenentCus WHERE code=?");
             pstm.setString(1, code);
-            pstm.executeUpdate();
+            pstm.executeUpdate();*/
+
+            permenentBO.deletePermenentCus(code);
 
             tblCustomer.getItems().remove(tblCustomer.getSelectionModel().getSelectedItem());
             tblCustomer.getSelectionModel().clearSelection();
             initUI();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the permenent customer " + code).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private boolean existPermenentCustomer(String code) throws SQLException {
-        Connection connection = DbConnection.getInstance().getConnection();
+    private boolean existPermenentCustomer(String code) throws SQLException, ClassNotFoundException {
+        /*Connection connection = DbConnection.getInstance().getConnection();
         PreparedStatement pstm = connection.prepareStatement("SELECT code FROM permenentCus WHERE code=?");
         pstm.setString(1, code);
-        return pstm.executeQuery().next();
+        return pstm.executeQuery().next();*/
+
+        return permenentBO.existPermenentCus(code);
     }
 
     @FXML
@@ -203,20 +225,7 @@ public class PermenentBuyerFormController {
         String address = txtAddress.getText();
         String contact = txtContact.getText();
         String description = txtDescription.getText();
-
-        /*if (!description.matches("[A-Za-z0-9 ]+")) {
-            new Alert(Alert.AlertType.ERROR, "Invalid description").show();
-            txtDescription.requestFocus();
-            return;
-        } else if (!txtUnitPrice.getText().matches("^[0-9]+[.]?[0-9]*$")) {
-            new Alert(Alert.AlertType.ERROR, "Invalid unit price").show();
-            txtUnitPrice.requestFocus();
-            return;
-        } else if (!txtQtyOnHand.getText().matches("^\\d+$")) {
-            new Alert(Alert.AlertType.ERROR, "Invalid qty on hand").show();
-            txtQtyOnHand.requestFocus();
-            return;
-        }*/
+        // validation
 
 
         if (btnSave.getText().equalsIgnoreCase("save")) {
@@ -225,18 +234,21 @@ public class PermenentBuyerFormController {
                     new Alert(Alert.AlertType.ERROR, code + " already exists").show();
                 }
                 //Save customer
-                Connection connection = DbConnection.getInstance().getConnection();
+                /*Connection connection = DbConnection.getInstance().getConnection();
                 PreparedStatement pstm = connection.prepareStatement("INSERT INTO permenentCus (code, name, address, contact, description) VALUES (?,?,?,?,?)");
                 pstm.setString(1, code);
                 pstm.setString(2, name);
                 pstm.setString(3, address);
                 pstm.setString(4, contact);
                 pstm.setString(5, description);
-                pstm.executeUpdate();
+                pstm.executeUpdate();*/
+                permenentBO.savePermenentCus(new PermenentDTO(code,name, address, contact, description));
                 tblCustomer.getItems().add(new PermenentTm(code, name, address, contact, description));
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         } else {
             try {
@@ -244,7 +256,7 @@ public class PermenentBuyerFormController {
                     new Alert(Alert.AlertType.ERROR, "There is no such permenent customer associated with the id " + code).show();
                 }
                 /*Update customer*/
-                Connection connection = DbConnection.getInstance().getConnection();
+                /*Connection connection = DbConnection.getInstance().getConnection();
                 PreparedStatement pstm = connection.prepareStatement("UPDATE permenentCus SET name=?, address=?, contact=?, description=? WHERE code=?");
                 pstm.setString(1, name);
                 pstm.setString(2, address);
@@ -259,8 +271,9 @@ public class PermenentBuyerFormController {
                 selectedCustomer.setAddress(address);
                 selectedCustomer.setContact(contact);
                 selectedCustomer.setDescription(description);
-                tblCustomer.refresh();
-            } catch (SQLException e) {
+                tblCustomer.refresh();*/
+                permenentBO.updatePermenentCus(new PermenentDTO(code, name, address, contact, description));
+            } catch (SQLException | ClassNotFoundException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
             }
         }

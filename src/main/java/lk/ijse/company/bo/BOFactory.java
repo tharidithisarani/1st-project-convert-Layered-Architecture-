@@ -1,8 +1,7 @@
 package lk.ijse.company.bo;
 
 import lk.ijse.company.bo.custom.ItemBO;
-import lk.ijse.company.bo.custom.impl.CustomerBOImpl;
-import lk.ijse.company.bo.custom.impl.ItemBOImpl;
+import lk.ijse.company.bo.custom.impl.*;
 
 import static com.lowagie.text.pdf.PdfName.PO;
 
@@ -16,7 +15,7 @@ public class BOFactory {
     }
 
     public enum BOTypes{
-        Customer, Item, Machine, Permenent, Supplier, technisiyan
+        Customer, Item, Machine, Permenent, Supplier, Technisiyan
     }
 
     //Object creation logic for BO objects
@@ -26,7 +25,14 @@ public class BOFactory {
                 return new CustomerBOImpl();
             case Item:
                 return new ItemBOImpl();
-
+            case Permenent:
+                return new PermenentBOImpl();
+            /*case Machine:
+                return new MachineBOImpl();
+            case Supplier:
+                return new SupplierBOImpl();
+            case Technisiyan:
+                return new TechnisiyanBOImpl();*/
             default:
                 return null;
         }

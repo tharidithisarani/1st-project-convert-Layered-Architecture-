@@ -18,7 +18,11 @@ public class ItemDAOImpl implements ItemDAO {
         ArrayList<Item> allItems = new ArrayList<>();
         ResultSet rst = SQLUtil.execute("SELECT * FROM Item");
         while (rst.next()) {
-            allItems.add(new Item(rst.getString("code"), rst.getString("description"), rst.getBigDecimal("unitPrice"),rst.getInt("qtyOnHand")));
+            allItems.add(new Item(rst.getString("code"),
+                    rst.getString("description"),
+                    rst.getBigDecimal("unitPrice"),
+                    rst.getInt("qtyOnHand")
+            ));
         }
         return allItems;
     }

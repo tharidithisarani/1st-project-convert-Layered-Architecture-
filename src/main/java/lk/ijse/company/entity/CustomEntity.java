@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class CustomEntity {
     //Order
     private String orderId;
-    private String customerId;
+//    private String customerId;
     private LocalDate orderDate;
 
     //OrderDetail
