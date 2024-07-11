@@ -6,10 +6,7 @@ import lk.ijse.company.database.DbConnection;
 import lk.ijse.company.entity.Technisiyan;
 import lk.ijse.company.model.tm.TechDetailTm;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class TechnisiyanDAOImpl implements TechnisiyanDAO {
@@ -33,7 +30,8 @@ public class TechnisiyanDAOImpl implements TechnisiyanDAO {
 
     @Override
     public boolean save(Technisiyan entity) throws SQLException, ClassNotFoundException {
-        return false;
+        return SQLUtil.execute("INSERT INTO techDetail (code, NIC, name, address, contact, bankName, accountNum, toolCode, description) VALUES (?,?,?,?,?,?,?,?,?)",
+                entity.getCode(), entity.getNic(), entity.getName(), entity.getAddress(), entity.getContact(), entity.getBankName(), entity.getAccountNum(), entity.getToolCode(), entity.getDescription());
     }
 
     @Override
@@ -59,12 +57,13 @@ public class TechnisiyanDAOImpl implements TechnisiyanDAO {
     }
 
     @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return false;
+    public boolean delete(String nic) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("DELETE FROM techDetail WHERE NIC=?", nic);
     }
 
     @Override
     public Technisiyan search(String id) throws SQLException, ClassNotFoundException {
+
         return null;
     }
 }

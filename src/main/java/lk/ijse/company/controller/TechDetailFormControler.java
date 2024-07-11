@@ -227,9 +227,11 @@ public class TechDetailFormControler {
             } else {
                 return "Code-000-001";
             }*/
-            return technisiyanBO.generateNewCode()
+            return technisiyanBO.generateNewCode();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return "Code-000-001";
     }
@@ -241,16 +243,20 @@ public class TechDetailFormControler {
             if (!existTechDetail(NIC)) {
                 new Alert(Alert.AlertType.ERROR, "There is no such Technisiyan associated with the NIC no " + NIC).show();
             }
-            Connection connection = DbConnection.getInstance().getConnection();
+            /*Connection connection = DbConnection.getInstance().getConnection();
             PreparedStatement pstm = connection.prepareStatement("DELETE FROM techDetail WHERE NIC=?");
             pstm.setString(1, NIC);
-            pstm.executeUpdate();
+            pstm.executeUpdate();*/
+
+            technisiyanBO.deleteTechnisiyan(NIC);
 
             tblTechDetail.getItems().remove(tblTechDetail.getSelectionModel().getSelectedItem());
             tblTechDetail.getSelectionModel().clearSelection();
             initUI();
         } catch (SQLException e) {
             new Alert(Alert.AlertType.ERROR, "Failed to delete the Technisiyan " + NIC).show();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -279,7 +285,7 @@ public class TechDetailFormControler {
                     new Alert(Alert.AlertType.ERROR, NIC + " already exists").show();
                 }
                 //Save Item
-                Connection connection = DbConnection.getInstance().getConnection();
+                /*Connection connection = DbConnection.getInstance().getConnection();
                 PreparedStatement pstm = connection.prepareStatement("INSERT INTO techDetail (code, NIC, name, address, contact, bankName, accountNum, toolCode, description) VALUES (?,?,?,?,?,?,?,?,?)");
                 pstm.setString(1, code);
                 pstm.setString(2, NIC);
@@ -290,11 +296,14 @@ public class TechDetailFormControler {
                 pstm.setString(7, accountNum);
                 pstm.setString(8, toolCode);
                 pstm.setString(9, description);
-                pstm.executeUpdate();
+                pstm.executeUpdate();*/
+                technisiyanBO.saveTechnisiyan((new TechnisiyanDTO(code, NIC, name, address, contact, bankName, accountNum, toolCode, description)));
                 tblTechDetail.getItems().add(new TechDetailTm(code, NIC, name, address, contact, bankName, accountNum, toolCode, description));
 
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         } else {
             try {

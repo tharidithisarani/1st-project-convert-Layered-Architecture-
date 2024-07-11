@@ -25,8 +25,8 @@ public class TechnisiyanBOImpl implements TechnisiyanBO {
     }
 
     @Override
-    public boolean deleteTechnisiyan(String code) throws SQLException, ClassNotFoundException {
-        return technisiyanDAO.delete(code);
+    public boolean deleteTechnisiyan(String NIC) throws SQLException, ClassNotFoundException {
+        return technisiyanDAO.delete(NIC);
     }
 
     @Override
